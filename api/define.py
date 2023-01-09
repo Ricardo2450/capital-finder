@@ -8,16 +8,15 @@ class handler(BaseHTTPRequestHandler):
         url_components = parse.urlsplit(s)
         query_string_list = parse.parse_qsl(url_components.query)
         dic = dict(query_string_list)
+        #print(f"The dic is: {dic}")
 
-        if "word" in dic:
-            url = "https://restcountries.com/v3.1/capital/{capital}"
-            r = requests.get(url + dic["word"])
+        if "country" in dic:
+            url = "https://restcountries.com/v3.1/name/"
+            r = requests.get(url + dic["country"])
             data = r.json()
-            definitions = []
-            for word_data in data:
-                definition = word_data["meanings"][0]["definitions"][0]["definition"]
-                definitions.append(definition)
-            message = str(definitions)
+            capital = data[0]["capital"][0]
+
+            message = f"The capital of {dic['country']} is {str(capital)}"
 
         else:
             message = "Give me a word to define please"
